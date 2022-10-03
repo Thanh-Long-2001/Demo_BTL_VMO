@@ -14,6 +14,7 @@ export class Category {
 
     @Prop()
     banner : string;
+
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

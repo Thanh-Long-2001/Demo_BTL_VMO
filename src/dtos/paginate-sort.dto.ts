@@ -1,22 +1,22 @@
-import { IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { Type } from 'class-transformer';
+// import { IsNotEmpty, IsNumber, IsString } from "class-validator";
+// import { Type } from 'class-transformer';
 
-export class PaginateDto {
+// export class PaginateDto {
 
-    @IsNotEmpty()
-    @Type(() => Number)
-    @IsNumber()
-    skip: number;
+//     @IsNotEmpty()
+//     @Type(() => Number)
+//     @IsNumber()
+//     skip: number;
 
-    @IsNotEmpty()
-    @Type(() => Number)
-    @IsNumber()
-    limit: number;
+//     @IsNotEmpty()
+//     @Type(() => Number)
+//     @IsNumber()
+//     limit: number;
 
-    @IsNotEmpty()
-    sortBy: any;
+//     @IsNotEmpty()
+//     sortBy: any;
 
-    @IsNotEmpty()
-    sortOrder: any;
+//     @IsNotEmpty()
+//     sortOrder: any;
 
-}
+// }

@@ -14,6 +14,9 @@ export class Cart {
 
     @Prop()
     totalPrice: number;
+
+    @Prop()
+    appliedVoucher: any[];
 }
 
 export const CartSchema = SchemaFactory.createForClass(Cart);

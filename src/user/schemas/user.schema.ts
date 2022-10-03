@@ -1,6 +1,7 @@
 import { Prop, SchemaFactory, Schema } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, SchemaTypes } from 'mongoose';
 import { Role } from 'src/auth/enums/role.enum';
+import { Voucher } from 'src/voucher/schemas/voucher.schema'
 
 export type UserDocument = User & Document;
 
@@ -9,7 +10,7 @@ export class User {
     @Prop()
     username: string;
 
-    @Prop()
+    @Prop({unique: true})
     email: string;
 
     @Prop()
@@ -23,6 +24,12 @@ export class User {
 
     @Prop()
     refreshTokenExp: string;
+
+    @Prop()
+    vouchers: any[];
+
+    @Prop({default: false})
+    isConfirmEmail: boolean;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

@@ -1,17 +1,15 @@
-import { IsNotEmpty, IsMongoId } from 'class-validator';
+import { ApiProperty } from "@nestjs/swagger";
 
 export class ProductDTO {
-
-    @IsNotEmpty()
+    @ApiProperty()
     name: string;
     slug: string;
     description: string;
 
-    @IsNotEmpty()
     price: number;
-
-    @IsNotEmpty()
-    @IsMongoId() //used to check if input value is ObjectId type
+    soluong: number;
+    image: string;
+    qrcode: string;
     category: any;
 
 }

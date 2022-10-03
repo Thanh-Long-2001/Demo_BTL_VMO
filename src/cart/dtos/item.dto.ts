@@ -1,6 +1,6 @@
 export class ItemDTO {
     productID: string;
-    name: string;
+    // name: string;
     amount: number;
-    price: number;
+    // price: number;
 }

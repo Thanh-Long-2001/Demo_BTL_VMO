@@ -8,17 +8,19 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { RefreshStrategy } from './strategies/refresh.strategy';
+import { EmailConfirmModule } from '../email-confirm/email-confirm.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: 'src/.env'
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '10000s' },
+    }),
     UserModule, 
     PassportModule, 
-    JwtModule.register({
-    secret: process.env.JWT_SECRET,
-    signOptions: { expiresIn: '1h' },
-    }) 
+    EmailConfirmModule 
   ],
   providers: [
     AuthService,

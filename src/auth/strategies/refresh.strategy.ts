@@ -1,65 +1,17 @@
-// import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
-// import { PassportStrategy } from '@nestjs/passport';
-// import { Request } from 'express';
-// import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import { UserService } from 'src/user/user.service';
-// import {} from 'dotenv/config';
-
-// @Injectable()
-// export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
-//     constructor(private userService: UserService) {
-//         super({
-//             jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
-//                 let data = request?.cookies['auth-cookie'];
-//                 if(!data) {
-//                     return null;
-//                 }
-//                 return data.accessToken;
-//             }]),
-//             ignoreExpiration: false,
-//             // passReqToCallback: true,
-//             secretOrKey: process.env.REFRESH_TOKEN_SECRET,
-//         });
-//     }
-
-    // async validate(req: Request, payload: any) {
-    //     if(!payload) {
-    //         throw new BadRequestException('Invalid jwt token');
-    //     }
-
-    //     let data = req?.cookies['auth-cookie'];
-    //     console.log(data);
-    //     if(!data?.refreshToken) {
-    //         throw new BadRequestException('Invalid refresh token')
-    //     }
-
-    //     let user = await this.userService.validRefreshToken(payload.email, data.refreshToken);
-    //     if(!user) {
-    //         throw new BadRequestException('Token expired')
-    //     }
-
-    //     return payload;
-    // }
-// }
-
-
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, BadRequestException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import {} from 'dotenv/config';
 
 @Injectable()
 export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
-  constructor(private userService: UserService) {
+  constructor(private userService: UserService, private readonly jwtService: JwtService) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([(request: Request) => {
-        let data = request?.cookies['auth-cookie'];
-                if(!data){
-                    return null;
-                }
-                return data.accessToken;
-      }]),
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: true,
       passReqToCallback: true,
       secretOrKey: process.env.REFRESHTOKEN_SECRET,
@@ -72,13 +24,19 @@ export class RefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
     }
     // console.log(payload);
 
-    let data = req?.cookies['auth-cookie'];
-    // console.log(data);
-    if(!data?.refreshToken) {
+    let refreshToken = req.body.refreshToken;
+    console.log(req.params.refreshToken);
+    const userFromToken = await this.jwtService.verify(refreshToken);
+    
+    const refreshTokenOfUser = await this.userService.findUserById(userFromToken._id)
+    
+    
+    
+    if(!refreshTokenOfUser?.refreshToken) {
         throw new BadRequestException('Invalid refresh token')
     }
 
-    let user = await this.userService.validRefreshToken(payload.mail, data.refreshToken);
+    let user = await this.userService.validRefreshToken(userFromToken.email, refreshTokenOfUser.refreshToken);
     
     if(!user) {
         throw new BadRequestException('Token expired')

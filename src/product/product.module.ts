@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module, CacheInterceptor  } from '@nestjs/common';
 import { ProductController } from './product.controller';
 import { ProductService } from './product.service';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CategoryModule } from 'src/category/category.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -18,9 +19,13 @@ import { CategoryModule } from 'src/category/category.module';
         }
       }
     ]),
+    
     CategoryModule],
   controllers: [ProductController],
-  providers: [ProductService],
-  
+  providers: [
+    ProductService,
+    
+  ],
+  exports: [ProductService]
 })
 export class ProductModule {}
